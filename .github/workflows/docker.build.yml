@@ -72,3 +72,5 @@ jobs:
           commit-message: Deploy new UI image ${{ steps.docker_meta.outputs.tags }}
           title: 'Deploy new UI image ${{ steps.docker_meta.outputs.tags }}'
           labels: automated pr
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
