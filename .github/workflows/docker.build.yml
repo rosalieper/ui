@@ -67,8 +67,8 @@ jobs:
       # Make changes to pull request here
       - run: |
           get_image_tag=($(echo ${{ steps.docker_meta.outputs.tags }} | awk -F ':' '{print $2}'))
-          yq -i '.image.tag = ${get_image_tag}' k8s/helmfile/env/local/ui.values.yaml.gotmpl
-          yq -i '.image.tag = ${get_image_tag}' k8s/helmfile/env/staging/ui.values.yaml.gotmpl
+          yq -i '.image.tag = ${{get_image_tag}}' k8s/helmfile/env/local/ui.values.yaml.gotmpl
+          yq -i '.image.tag = ${{get_image_tag}}' k8s/helmfile/env/staging/ui.values.yaml.gotmpl
       - uses: peter-evans/create-pull-request@v4
         with:
           commit-message: Deploy new UI image ${{ steps.docker_meta.outputs.tags }}
