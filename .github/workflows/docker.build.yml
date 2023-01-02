@@ -66,7 +66,8 @@ jobs:
           repository: rosalieper/wbaas-deploy
       # Make changes to pull request here
       - run: |
-          yq -i '.image.tag = "test"' k8s/helmfile/env/local/ui.values.yaml.gotmpl
+          split_tag_in_two=($(echo ${{ steps.docker_meta.outputs.tags }} | tr ";""\n"))
+          yq -i '.image.tag = ${split_tag_in_two[1]}' k8s/helmfile/env/local/ui.values.yaml.gotmpl
           yq -i '.image.tag = "test"' k8s/helmfile/env/staging/ui.values.yaml.gotmpl
       - uses: peter-evans/create-pull-request@v4
         with:
