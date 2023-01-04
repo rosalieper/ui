@@ -61,6 +61,7 @@ jobs:
       -
         name: create pull request for deploy on staging
         uses: actions/checkout@v3
+        if: github.event_name == 'push'
         with:
           repository: rosalieper/wbaas-deploy
       # Make changes to pull request here
