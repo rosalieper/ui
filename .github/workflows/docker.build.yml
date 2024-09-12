@@ -7,10 +7,11 @@ on:
     tags:
       - '*'
   pull_request:
-
 jobs:
   docker-build:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       -
         name: Checkout
@@ -66,10 +67,11 @@ jobs:
           repository: rosalieper/wbaas-deploy
       # Make changes to pull request here
       - run: |
-          yq -i '.image.tag = ${{ steps.docker_meta.outputs.tags }}' k8s/helmfile/env/local/ui.values.yaml.gotmpl
-          yq -i '.image.tag = ${{ steps.docker_meta.outputs.tags }}' k8s/helmfile/env/staging/ui.values.yaml.gotmpl
+          yq -i '.image.tag = "$(echo ${{ steps.docker_meta.outputs.tags }} | cut -d':' -f2)"' k8s/helmfile/env/local/ui.values.yaml.gotmpl
+          yq -i '.image.tag = "$(echo ${{ steps.docker_meta.outputs.tags }} | cut -d':' -f2)"' k8s/helmfile/env/staging/ui.values.yaml.gotmpl
       - uses: peter-evans/create-pull-request@v4
         with:
           commit-message: Deploy new UI image ${{ steps.docker_meta.outputs.tags }}
           title: 'Deploy new UI image ${{ steps.docker_meta.outputs.tags }}'
           labels: automated pr
+
